@@ -58,15 +58,7 @@
                 </button>
             </form>
             
-            <div class="mt-6 p-4 bg-gray-100 rounded-lg border border-gray-300">
-                <p class="text-sm font-semibold text-gray-700">📝 Informasi Pendaftaran:</p>
-                <ul class="text-xs text-gray-600 mt-2 space-y-1 list-disc list-inside">
-                    <li>Nama harus diisi</li>
-                    <li>Email harus valid dan unik</li>
-                    <li>Password minimal 6 karakter</li>
-                    <li>Password dan konfirmasi harus sama</li>
-                </ul>
-            </div>
+           
             
             <div class="text-center pt-12 pb-12">
                 <p class="text-gray-600">Already have an account? <a href="{{ route('login') }}" class="underline font-semibold text-blue-600 hover:text-blue-800">Log in here.</a></p>
@@ -74,7 +66,6 @@
         </div>
     </div>
 
-    <!-- Image Section -->
     <div class="w-1/2 shadow-2xl">
         <img class="object-cover w-full h-screen hidden md:block" 
              src="https://source.unsplash.com/IXUM4cJynP0" alt="Background">
