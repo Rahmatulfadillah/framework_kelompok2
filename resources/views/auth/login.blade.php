@@ -1,118 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailwind Login Template</title>
-    <meta name="author" content="David Grzyb">
-    <meta name="description" content="">
+@extends('layouts.app')
 
-    <!-- Tailwind -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+@section('title', 'Login')
 
-        .font-family-karla {
-            font-family: karla;
-        }
-    </style>
-</head>
-<body class="bg-white font-family-karla h-screen">
-
-    <div class="w-full flex flex-wrap">
-
-        <!-- Login Section -->
-        <div class="w-full md:w-1/2 flex flex-col">
-
-            <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-                <a href="#" class="bg-black text-white font-bold text-xl p-4">Logo</a>
-            </div>
-
-            <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
-                <p class="text-center text-3xl">Welcome.</p>
-                
-                <!-- Pesan error/sukses -->
-                <div id="message" class="mt-4 text-center text-sm hidden"></div>
-                
-                <form class="flex flex-col pt-3 md:pt-8" onsubmit="handleLogin(event)">
-                    <div class="flex flex-col pt-4">
-                        <label for="email" class="text-lg">Email</label>
-                        <input type="email" id="email" placeholder="your@email.com" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-
-                    <div class="flex flex-col pt-4">
-                        <label for="password" class="text-lg">Password</label>
-                        <input type="password" id="password" placeholder="Password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-
-                    <input type="submit" value="Log In" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 cursor-pointer"
-                    >
-                </form>
-                 <form action="<?= base_url('/auth/Login') ?>" method="post">
-                <?= csrf_field() ?>
-               
-                
-                <div class="text-center pt-12 pb-12">
-                    <p>Don't have an account? <a href="register.html" class="underline font-semibold">Register here.</a></p>
-                </div>
-            </div>
-
+@section('content')
+<div class="w-full flex flex-wrap min-h-screen">
+    <!-- Login Section -->
+    <div class="w-full md:w-1/2 flex flex-col">
+        <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
+            <a href="/" class="bg-black text-white font-bold text-xl p-4 rounded-lg">MyApp</a>
         </div>
 
-        <!-- Image Section -->
-        <div class="w-1/2 shadow-2xl">
-            <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" alt="Login background">
+        <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+            <p class="text-center text-3xl font-bold text-gray-800">Welcome.</p>
+            
+            @if(session('success'))
+                <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm border border-green-300">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm border border-red-300">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="flex flex-col pt-4">
+                    <label for="email" class="text-lg font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" 
+                           placeholder="your@email.com" 
+                           class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror">
+                </div>
+
+                <div class="flex flex-col pt-4">
+                    <label for="password" class="text-lg font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" 
+                           class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <button type="submit" class="bg-black text-white font-bold text-lg hover:bg-gray-800 p-3 mt-8 rounded-lg transition duration-200">
+                    Log In
+                </button>
+            </form>
+            
+            <div class="mt-6 p-4 bg-gray-100 rounded-lg border border-gray-300">
+                <p class="text-sm font-semibold text-gray-700">🔑 Kredensial Demo:</p>
+                <p class="text-sm text-gray-600 mt-1"><span class="font-medium">Email:</span> admin@example.com</p>
+                <p class="text-sm text-gray-600"><span class="font-medium">Password:</span> admin123</p>
+                <p class="text-xs text-gray-500 mt-2 italic">Gunakan kredensial di atas untuk login</p>
+            </div>
+            
+            <div class="text-center pt-12 pb-12">
+                <p class="text-gray-600">Don't have an account? <a href="{{ route('register') }}" class="underline font-semibold text-blue-600 hover:text-blue-800">Register here.</a></p>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Kredensial yang valid
-        const VALID_CREDENTIALS = {
-            email: 'admin@example.com',
-            password: 'admin123'
-        };
-
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const messageDiv = document.getElementById('message');
-            
-            const email = emailInput.value.trim();
-            const password = passwordInput.value.trim();
-            
-            // Reset pesan
-            messageDiv.className = 'mt-4 text-center text-sm hidden';
-            messageDiv.textContent = '';
-            
-            // Validasi input kosong
-            if (!email || !password) {
-                messageDiv.className = 'mt-4 text-center text-sm text-red-600';
-                messageDiv.textContent = '⚠️ Harap isi email dan password!';
-                return;
-            }
-            
-            // Cek kredensial
-            if (email === VALID_CREDENTIALS.email && password === VALID_CREDENTIALS.password) {
-                messageDiv.className = 'mt-4 text-center text-sm text-green-600';
-                messageDiv.textContent = '✅ Login berhasil! Selamat datang, Admin!';
-                
-                // Reset form
-                emailInput.value = '';
-                passwordInput.value = '';
-                
-                // Simulasi redirect setelah 2 detik
-                setTimeout(() => {
-                    alert('Login berhasil! Redirect ke halaman dashboard.');
-                    // window.location.href = 'dashboard.html'; // Uncomment untuk redirect
-                }, 2000);
-            } else {
-                messageDiv.className = 'mt-4 text-center text-sm text-red-600';
-                messageDiv.textContent = '❌ Email atau password salah!';
-            }
-        }
-    </script>
-
-</body>
-</html>
+    <!-- Image Section -->
+    <div class="w-1/2 shadow-2xl">
+        <img class="object-cover w-full h-screen hidden md:block" 
+             src="https://source.unsplash.com/IXUM4cJynP0" alt="Login background">
+    </div>
+</div>
+@endsection
