@@ -8,29 +8,29 @@
             <i class="fas fa-book-reader text-blue-400 text-xl mr-2"></i>
             <span class="text-xl font-bold tracking-wider">SIPerpus</span>
         </div>
-        
+
         <nav class="flex-1 overflow-y-auto py-4">
             <div class="px-4 py-2 text-xs text-gray-400 uppercase tracking-wider">Menu Utama</div>
-            <a href="{{ route('dashboard') }}" 
+            <a href="{{ route('dashboard') }}"
                class="sidebar-link flex items-center px-4 py-3 rounded-lg mx-2 {{ request()->routeIs('dashboard') ? 'bg-gray-700 text-white font-semibold' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                 <i class="fas fa-chart-pie w-5"></i>
                 <span class="ml-3">Dashboard</span>
             </a>
-            
+
             <div class="px-4 py-2 mt-4 text-xs text-gray-400 uppercase tracking-wider">Manajemen</div>
-            <a href="{{ route('books.index') }}" 
+            <a href="{{ route('books.index') }}"
                class="sidebar-link flex items-center px-4 py-3 rounded-lg mx-2 {{ request()->routeIs('books.*') ? 'bg-gray-700 text-white font-semibold' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                 <i class="fas fa-book w-5"></i>
                 <span class="ml-3">Daftar Buku</span>
             </a>
-            <a href="{{ route('loans.index') }}" 
+            <a href="{{ route('loans.index') }}"
                class="sidebar-link flex items-center px-4 py-3 rounded-lg mx-2 {{ request()->routeIs('loans.*') ? 'bg-gray-700 text-white font-semibold' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                 <i class="fas fa-exchange-alt w-5"></i>
                 <span class="ml-3">Peminjaman</span>
             </a>
-            
+
             <div class="px-4 py-2 mt-4 text-xs text-gray-400 uppercase tracking-wider">Akun</div>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                class="sidebar-link flex items-center px-4 py-3 text-red-400 hover:bg-gray-700 hover:text-red-300 rounded-lg mx-2 mt-auto">
                 <i class="fas fa-sign-out-alt w-5"></i>
                 <span class="ml-3">Logout</span>
@@ -49,7 +49,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">@yield('page_title', 'Dashboard')</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2 pl-4">
-                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3B82F6&color=fff&size=40&bold=true" 
+                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=3B82F6&color=fff&size=40&bold=true"
                              alt="Avatar" class="w-10 h-10 rounded-full border-2 border-blue-500">
                         <div>
                             <span class="text-sm font-semibold text-gray-700 block">{{ Auth::user()->name }}</span>

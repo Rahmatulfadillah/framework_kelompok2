@@ -7,12 +7,13 @@
     <!-- Login Section -->
     <div class="w-full md:w-1/2 flex flex-col">
         <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-            <a href="/" class="bg-black text-white font-bold text-xl p-4 rounded-lg">MyApp</a>
+
+            <a href="/" class="bg-gray-800 text-white font-bold text-xl p-4 rounded-lg"> <i class="fas fa-book-reader text-blue-400 text-xl mr-2"></i>SIperpus</a>
         </div>
 
         <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
             <p class="text-center text-3xl font-bold text-gray-800">Welcome.</p>
-            
+
             @if(session('success'))
                 <div class="mt-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm border border-green-300">
                     {{ session('success') }}
@@ -29,14 +30,14 @@
                 @csrf
                 <div class="flex flex-col pt-4">
                     <label for="email" class="text-lg font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" 
-                           placeholder="your@email.com" 
+                    <input type="email" id="email" name="email" value="{{ old('email') }}"
+                           placeholder="your@email.com"
                            class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror">
                 </div>
 
                 <div class="flex flex-col pt-4">
                     <label for="password" class="text-lg font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password" 
+                    <input type="password" id="password" name="password" placeholder="Password"
                            class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
@@ -44,14 +45,14 @@
                     Log In
                 </button>
             </form>
-            
+
             <div class="mt-6 p-4 bg-gray-100 rounded-lg border border-gray-300">
                 <p class="text-sm font-semibold text-gray-700">🔑 Kredensial Demo:</p>
                 <p class="text-sm text-gray-600 mt-1"><span class="font-medium">Email:</span> admin@example.com</p>
                 <p class="text-sm text-gray-600"><span class="font-medium">Password:</span> admin123</p>
                 <p class="text-xs text-gray-500 mt-2 italic">Gunakan kredensial di atas untuk login</p>
             </div>
-            
+
             <div class="text-center pt-12 pb-12">
                 <p class="text-gray-600">Don't have an account? <a href="{{ route('register') }}" class="underline font-semibold text-blue-600 hover:text-blue-800">Register here.</a></p>
             </div>
@@ -60,7 +61,7 @@
 
     <!-- Image Section -->
     <div class="w-1/2 shadow-2xl">
-        <img class="object-cover w-full h-screen hidden md:block" 
+        <img class="object-cover w-full h-screen hidden md:block"
              src="https://source.unsplash.com/IXUM4cJynP0" alt="Login background">
     </div>
 </div>
