@@ -1,267 +1,224 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Dashboard')
+@section('page_title', 'Dashboard')
 
-@section('content')
-<div class="flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <div class="w-64 bg-gray-800 text-white flex flex-col flex-shrink-0">
-        <div class="flex items-center justify-center h-16 bg-gray-900">
-            <span class="text-2xl font-bold">MyApp</span>
+@section('admin_content')
+<!-- Welcome Message -->
+<div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-md p-6 mb-6 text-white">
+    <h2 class="text-2xl font-bold">Selamat datang kembali, {{ Auth::user()->name }}! 👋</h2>
+    <p class="mt-1 opacity-90">Sistem Informasi Perpustakaan (SIPerpus) siap membantu Anda mengelola data buku dan transaksi peminjaman.</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Total Koleksi Buku</p>
+                <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ number_format($totalBooks) }}</p>
+                <p class="text-xs text-blue-500 mt-1">Judul Buku Terdaftar</p>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-full">
+                <i class="fas fa-book text-blue-500 text-2xl"></i>
+            </div>
         </div>
-        
-        <nav class="flex-1 overflow-y-auto py-4">
-            <div class="px-4 py-2 text-xs text-gray-400 uppercase tracking-wider">Main</div>
-            <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-4 py-3 bg-gray-700 text-white rounded-lg mx-2">
-                <i class="fas fa-home w-5"></i>
-                <span class="ml-3">Dashboard</span>
-            </a>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-chart-line w-5"></i>
-                <span class="ml-3">Analytics</span>
-            </a>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-users w-5"></i>
-                <span class="ml-3">Users</span>
-            </a>
-            
-            <div class="px-4 py-2 mt-4 text-xs text-gray-400 uppercase tracking-wider">Management</div>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-shopping-cart w-5"></i>
-                <span class="ml-3">Orders</span>
-            </a>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-box w-5"></i>
-                <span class="ml-3">Products</span>
-            </a>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-cog w-5"></i>
-                <span class="ml-3">Settings</span>
-            </a>
-            
-            <div class="px-4 py-2 mt-4 text-xs text-gray-400 uppercase tracking-wider">Account</div>
-            <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg mx-2">
-                <i class="fas fa-user w-5"></i>
-                <span class="ml-3">Profile</span>
-            </a>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
-               class="sidebar-link flex items-center px-4 py-3 text-red-400 hover:bg-gray-700 hover:text-red-300 rounded-lg mx-2">
-                <i class="fas fa-sign-out-alt w-5"></i>
-                <span class="ml-3">Logout</span>
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                @csrf
-            </form>
-        </nav>
     </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 overflow-y-auto">
-        <!-- Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-10">
-            <div class="flex items-center justify-between px-6 py-4">
-                <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
-                <div class="flex items-center space-x-4">
-                    <button class="text-gray-500 hover:text-gray-700 relative">
-                        <i class="fas fa-bell text-xl"></i>
-                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-                    </button>
-                    <button class="text-gray-500 hover:text-gray-700 relative">
-                        <i class="fas fa-envelope text-xl"></i>
-                        <span class="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">5</span>
-                    </button>
-                    <div class="flex items-center space-x-2 border-l pl-4">
-                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=1F2937&color=fff&size=40&bold=true" 
-                             alt="Avatar" class="w-10 h-10 rounded-full border-2 border-gray-300">
-                        <div>
-                            <span class="text-sm font-medium text-gray-700 block">{{ Auth::user()->name }}</span>
-                            <span class="text-xs text-gray-500">{{ Auth::user()->email }}</span>
-                        </div>
-                    </div>
-                </div>
+    
+    <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Total Anggota</p>
+                <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ number_format($totalUsers) }}</p>
+                <p class="text-xs text-green-500 mt-1">Pengguna Terdaftar</p>
             </div>
-        </header>
-
-        <!-- Content -->
-        <div class="p-6">
-            <!-- Welcome Message -->
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-6 mb-6 text-white">
-                <h2 class="text-2xl font-bold">Welcome back, {{ Auth::user()->name }}! 👋</h2>
-                <p class="mt-1 opacity-90">Here's what's happening with your business today.</p>
+            <div class="bg-green-50 p-4 rounded-full">
+                <i class="fas fa-users text-green-500 text-2xl"></i>
             </div>
-
-            <!-- Statistics -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <div class="stat-card bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500 font-medium">Total Revenue</p>
-                            <p class="text-2xl font-bold text-gray-800">${{ number_format($totalRevenue) }}</p>
-                            <p class="text-xs text-green-500 mt-1">↑ 12.5% from last month</p>
-                        </div>
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500 font-medium">Total Users</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ number_format($totalUsers) }}</p>
-                            <p class="text-xs text-green-500 mt-1">↑ 8.2% from last month</p>
-                        </div>
-                        <div class="bg-blue-100 p-3 rounded-full">
-                            <i class="fas fa-users text-blue-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500 font-medium">Active Orders</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $activeOrders }}</p>
-                            <p class="text-xs text-yellow-500 mt-1">↔ 0.5% from last month</p>
-                        </div>
-                        <div class="bg-yellow-100 p-3 rounded-full">
-                            <i class="fas fa-shopping-cart text-yellow-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="stat-card bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500 font-medium">Conversion Rate</p>
-                            <p class="text-2xl font-bold text-gray-800">{{ $conversionRate }}%</p>
-                            <p class="text-xs text-red-500 mt-1">↓ 2.1% from last month</p>
-                        </div>
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <i class="fas fa-percentage text-purple-600 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
+    
+    <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-yellow-500 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Sedang Dipinjam</p>
+                <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ $activeLoans }}</p>
+                <p class="text-xs text-yellow-500 mt-1">Transaksi Aktif</p>
             </div>
-
-            <!-- Recent Activity and Quick Actions -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Recent Activity -->
-                <div class="lg:col-span-2 bg-white rounded-lg shadow">
-                    <div class="p-6 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">Recent Activity</h3>
-                    </div>
-                    <div class="p-6">
-                        <div class="space-y-4">
-                            @foreach($recentActivities as $activity)
-                            <div class="flex items-center hover:bg-gray-50 p-2 rounded-lg transition duration-200">
-                                <div class="bg-{{ $activity->color }}-100 p-2 rounded-full">
-                                    <i class="fas fa-{{ $activity->icon }} text-{{ $activity->color }}-600"></i>
-                                </div>
-                                <div class="ml-4 flex-1">
-                                    <p class="text-sm font-medium text-gray-800">{{ $activity->title }}</p>
-                                    <p class="text-xs text-gray-500">{{ $activity->description }}</p>
-                                </div>
-                                <span class="text-xs text-gray-400">{{ $activity->time }}</span>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-6 border-b">
-                        <h3 class="text-lg font-semibold text-gray-800">Quick Actions</h3>
-                    </div>
-                    <div class="p-6 space-y-3">
-                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
-                            <i class="fas fa-plus mr-2"></i> Add New Product
-                        </button>
-                        <button class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
-                            <i class="fas fa-users mr-2"></i> Invite Users
-                        </button>
-                        <button class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
-                            <i class="fas fa-file-alt mr-2"></i> Generate Report
-                        </button>
-                        <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
-                            <i class="fas fa-cog mr-2"></i> System Settings
-                        </button>
-                    </div>
-                </div>
+            <div class="bg-yellow-50 p-4 rounded-full">
+                <i class="fas fa-exchange-alt text-yellow-500 text-2xl"></i>
             </div>
-
-            <!-- Recent Orders -->
-            <div class="mt-6 bg-white rounded-lg shadow">
-                <div class="p-6 border-b flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-800">Recent Orders</h3>
-                    <button class="text-sm text-blue-500 hover:text-blue-700 font-medium">View All <i class="fas fa-arrow-right ml-1"></i></button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @foreach($recentOrders as $order)
-                            <tr class="hover:bg-gray-50 transition duration-200">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $order->id }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-700">{{ $order->customer }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-700">{{ $order->product }}</td>
-                                <td class="px-6 py-4">
-                                    @php
-                                        $statusColors = [
-                                            'Completed' => 'green',
-                                            'Pending' => 'yellow',
-                                            'Processing' => 'blue',
-                                            'Cancelled' => 'red'
-                                        ];
-                                        $color = $statusColors[$order->status] ?? 'gray';
-                                    @endphp
-                                    <span class="px-3 py-1 text-xs font-semibold bg-{{ $color }}-100 text-{{ $color }}-800 rounded-full">
-                                        {{ $order->status }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $order->total }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+        </div>
+    </div>
+    
+    <div class="stat-card bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500 hover:shadow-md transition">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-gray-500 font-medium">Sudah Dikembalikan</p>
+                <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ $returnedLoans }}</p>
+                <p class="text-xs text-purple-500 mt-1">Transaksi Selesai</p>
             </div>
-
-            <!-- Footer -->
-            <div class="mt-8 text-center text-sm text-gray-500 border-t pt-6">
-                <p>&copy; {{ date('Y') }} MyApp. All rights reserved. | Built with ❤️ using Laravel</p>
+            <div class="bg-purple-50 p-4 rounded-full">
+                <i class="fas fa-check-circle text-purple-500 text-2xl"></i>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .sidebar-link {
-        transition: all 0.3s ease;
-    }
-    .sidebar-link:hover {
-        background-color: #374151;
-        padding-left: 1.5rem;
-    }
-    .stat-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-</style>
+<!-- Chart and Activities/Actions -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Chart.js Section -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border flex flex-col">
+        <div class="flex items-center justify-between border-b pb-4 mb-4">
+            <h3 class="text-lg font-bold text-gray-800">
+                <i class="fas fa-chart-line text-blue-500 mr-2"></i>Tren Peminjaman Buku (7 Hari Terakhir)
+            </h3>
+        </div>
+        <div class="flex-1 min-h-[300px] relative">
+            <canvas id="loansChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Quick Actions & Recent Activity -->
+    <div class="space-y-6">
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border">
+            <div class="border-b pb-3 mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Aksi Cepat</h3>
+            </div>
+            <div class="grid grid-cols-1 gap-3">
+                <a href="{{ route('books.create') }}" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition text-center block">
+                    <i class="fas fa-plus mr-2"></i> Tambah Buku Baru
+                </a>
+                <a href="{{ route('loans.create') }}" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition text-center block">
+                    <i class="fas fa-exchange-alt mr-2"></i> Buat Transaksi Pinjam
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border">
+            <div class="border-b pb-3 mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Aktivitas Terbaru</h3>
+            </div>
+            <div class="space-y-4 max-h-[250px] overflow-y-auto pr-1">
+                @forelse($recentActivities as $activity)
+                <div class="flex items-start p-2 rounded-lg hover:bg-gray-50 transition duration-150">
+                    <div class="bg-{{ $activity->color }}-100 p-2.5 rounded-xl flex-shrink-0 mt-0.5">
+                        <i class="fas fa-{{ $activity->icon }} text-{{ $activity->color }}-600"></i>
+                    </div>
+                    <div class="ml-3 flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-gray-800 truncate">{{ $activity->title }}</p>
+                        <p class="text-xs text-gray-600 mt-0.5">{{ $activity->description }}</p>
+                        <span class="text-[10px] text-gray-400 mt-1 block"><i class="far fa-clock mr-1"></i>{{ $activity->time }}</span>
+                    </div>
+                </div>
+                @empty
+                <p class="text-sm text-gray-500 text-center py-4">Belum ada aktivitas.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Transactions Table -->
+<div class="mt-6 bg-white rounded-xl shadow-sm border overflow-hidden">
+    <div class="p-6 border-b flex justify-between items-center">
+        <h3 class="text-lg font-bold text-gray-800">
+            <i class="fas fa-history text-blue-500 mr-2"></i>Daftar Peminjaman Terbaru
+        </h3>
+        <a href="{{ route('loans.index') }}" class="text-sm text-blue-600 hover:text-blue-800 font-bold flex items-center transition">
+            Lihat Semua <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-4">ID Transaksi</th>
+                    <th class="px-6 py-4">Nama Anggota</th>
+                    <th class="px-6 py-4">Judul Buku</th>
+                    <th class="px-6 py-4">Tanggal Pinjam</th>
+                    <th class="px-6 py-4 text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                @forelse($recentOrders as $order)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 font-semibold text-gray-900">{{ $order->id }}</td>
+                    <td class="px-6 py-4">{{ $order->customer }}</td>
+                    <td class="px-6 py-4 max-w-xs truncate">{{ $order->product }}</td>
+                    <td class="px-6 py-4"><i class="far fa-calendar-alt mr-2 text-gray-400"></i>{{ $order->total }}</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $order->status === 'Returned' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-yellow-50 text-yellow-700 border border-yellow-200' }}">
+                            <span class="w-1.5 h-1.5 mr-1.5 rounded-full {{ $order->status === 'Returned' ? 'bg-green-500' : 'bg-yellow-500' }}"></span>
+                            {{ $order->status === 'Returned' ? 'Selesai' : 'Dipinjam' }}
+                        </span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">Belum ada transaksi peminjaman.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('loansChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($chartLabels) !!},
+                datasets: [{
+                    label: 'Jumlah Transaksi Pinjam',
+                    data: {!! json_encode($chartValues) !!},
+                    borderColor: 'rgba(37, 99, 235, 1)', // Tailwind blue-600
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)', // Tailwind blue-500 with opacity
+                    borderWidth: 3,
+                    pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(243, 244, 246, 1)' // Gray-100
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            color: '#6B7280' // Gray-500
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#6B7280' // Gray-500
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endpush

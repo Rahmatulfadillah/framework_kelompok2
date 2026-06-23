@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LoanController;
 use Illuminate\Support\Facades\Route;
 
 // Guest routes (belum login)
@@ -17,6 +19,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // Books CRUD
+    Route::resource('books', BookController::class);
+
+    // Loans Management
+    Route::resource('loans', LoanController::class);
+    Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
 });
 
 // Redirect root ke login
