@@ -20,25 +20,30 @@ class DatabaseSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin Perpustakaan',
             'email' => 'admin@example.com',
+            'role' => 'admin',
             'password' => Hash::make('admin123'),
+            'email_verified_at' => now(),
         ]);
 
         $john = User::create([
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => Hash::make('password123'),
+            'email_verified_at' => now(),
         ]);
 
         $jane = User::create([
             'name' => 'Jane Smith',
             'email' => 'jane@example.com',
             'password' => Hash::make('password123'),
+            'email_verified_at' => now(),
         ]);
 
         $budi = User::create([
             'name' => 'Budi Santoso',
             'email' => 'budi@example.com',
             'password' => Hash::make('password123'),
+            'email_verified_at' => now(),
         ]);
 
         // 2. Seed Books

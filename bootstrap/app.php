@@ -12,10 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register custom middleware jika diperlukan
-        // $middleware->alias([
-        //     'auth.custom' => \App\Http\Middleware\AuthMiddleware::class,
-        // ]);
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\CheckAdmin::class,
+        ]);
 
         // Middleware group untuk web
         $middleware->web(append: [

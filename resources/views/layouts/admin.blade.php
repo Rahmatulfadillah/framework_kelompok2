@@ -23,11 +23,13 @@
                 <i class="fas fa-book w-5"></i>
                 <span class="ml-3">Daftar Buku</span>
             </a>
+            @if(auth()->user()->isAdmin())
             <a href="{{ route('loans.index') }}"
                class="sidebar-link flex items-center px-4 py-3 rounded-lg mx-2 {{ request()->routeIs('loans.*') ? 'bg-gray-700 text-white font-semibold' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }}">
                 <i class="fas fa-exchange-alt w-5"></i>
                 <span class="ml-3">Peminjaman</span>
             </a>
+            @endif
 
             <div class="px-4 py-2 mt-4 text-xs text-gray-400 uppercase tracking-wider">Akun</div>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"

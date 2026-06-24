@@ -7,7 +7,7 @@
     <!-- Register Section -->
     <div class="w-full md:w-1/2 flex flex-col">
         <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-12">
-            <a href="/" class="bg-black text-white font-bold text-xl p-4 rounded-lg">MyApp</a>
+            <a href="/" class="bg-black text-white font-bold text-xl p-4 rounded-lg"><i class="fas fa-book-reader text-blue-400 text-xl mr-2"></i>SIperpus</a>
         </div>
 
         <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
@@ -87,7 +87,7 @@
                     <div id="passwordMatch" class="mt-2 text-xs"></div>
                 </div>
 
-                <button type="submit" class="bg-black text-white font-bold text-lg hover:bg-gray-800 p-3 mt-8 rounded-lg transition duration-200">
+                <button type="submit" class="bg-gray-800 text-white font-bold text-lg hover:bg-gray-800 p-3 mt-8 rounded-lg transition duration-200">
                     Register
                 </button>
             </form>
@@ -96,8 +96,8 @@
                 <p class="text-sm font-semibold text-blue-800">📝 Syarat Pendaftaran:</p>
                 <ul class="text-xs text-blue-700 mt-2 space-y-1 list-disc list-inside">
                     <li>Nama hanya boleh mengandung huruf dan spasi</li>
-                    <li>Email harus valid (domain harus ada)</li>
-                    <li>Email tidak boleh dari provider temporary</li>
+                    <li><strong>Wajib menggunakan email Google (@gmail.com / @googlemail.com)</strong></li>
+                    <li>Email harus valid dan aktif (akan dikirimkan link verifikasi)</li>
                     <li>Password minimal 8 karakter</li>
                     <li>Password harus mengandung: Huruf Besar, huruf kecil, dan Angka</li>
                     <li>Password dan konfirmasi harus sama</li>
@@ -113,7 +113,7 @@
     <!-- Image Section -->
     <div class="w-1/2 shadow-2xl">
         <img class="object-cover w-full h-screen hidden md:block"
-             src="https://source.unsplash.com/IXUM4cJynP0" alt="Background">
+             src="/login%26register.jpg" alt="Background">
     </div>
 </div>
 

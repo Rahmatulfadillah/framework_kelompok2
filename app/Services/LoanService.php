@@ -56,6 +56,15 @@ class LoanService
             throw new \Exception("Stok buku '{$book->judul}' sedang kosong.");
         }
 
+        $hasActiveLoan = Loan::where('user_id', $userId)
+            ->where('book_id', $bookId)
+            ->where('status', 'borrowed')
+            ->exists();
+
+        if ($hasActiveLoan) {
+            throw new \Exception("Anda masih meminjam buku ini dan belum mengembalikannya.");
+        }
+
         return DB::transaction(function () use ($userId, $bookId, $loanDate, $book) {
             $loan = Loan::create([
                 'user_id' => $userId,

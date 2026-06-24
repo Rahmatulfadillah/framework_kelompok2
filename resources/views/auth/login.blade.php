@@ -41,7 +41,7 @@
                            class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <button type="submit" class="bg-black text-white font-bold text-lg hover:bg-gray-800 p-3 mt-8 rounded-lg transition duration-200">
+                <button type="submit" class="bg-gray-800 text-white font-bold text-lg hover:bg-gray-800 p-3 mt-8 rounded-lg transition duration-200">
                     Log In
                 </button>
             </form>
@@ -62,7 +62,7 @@
     <!-- Image Section -->
     <div class="w-1/2 shadow-2xl">
         <img class="object-cover w-full h-screen hidden md:block"
-             src="https://source.unsplash.com/IXUM4cJynP0" alt="Login background">
+             src="/login%26register.jpg" alt="Login background">
     </div>
 </div>
 @endsection

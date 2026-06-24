@@ -39,18 +39,26 @@ Route::post('/email/resend', function (Request $request) {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Auth routes (sudah login)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Books CRUD
-    Route::resource('books', BookController::class);
+    // Admin Routes
+    Route::middleware('admin')->group(function () {
+        // Books Management (except index & show)
+        Route::resource('books', BookController::class)->except(['index', 'show']);
 
-    // Loans Management
-    Route::resource('loans', LoanController::class);
-    Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
+        // Loans Management
+        Route::resource('loans', LoanController::class);
+        Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook'])->name('loans.return');
+    });
 
-    // Loan History
+    // Books Read-Only for all users
+    Route::get('books', [BookController::class, 'index'])->name('books.index');
+    Route::get('books/{book}', [BookController::class, 'show'])->name('books.show');
+
+    // Loan History for all users
     Route::get('/my-loans', [LoanHistoryController::class, 'index'])->name('loans.history');
+    Route::post('/books/{book}/borrow', [LoanController::class, 'userBorrow'])->name('books.borrow');
 });
 
 // Redirect root ke login

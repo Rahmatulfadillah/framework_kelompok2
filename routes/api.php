@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\BookSearchController;
+use App\Http\Controllers\Api\BookSearchApiController;
 use App\Http\Controllers\Api\EmailValidationController;
 use Illuminate\Support\Facades\Route;
+
+// External Book Search
+Route::get('/books/search-external', [BookSearchApiController::class, 'searchExternal'])->name('api.books.external');
 
 // Email validation
 Route::post('/email/validate', [EmailValidationController::class, 'validate'])->name('api.email.validate');

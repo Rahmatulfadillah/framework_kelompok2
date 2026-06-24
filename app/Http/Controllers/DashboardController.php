@@ -59,6 +59,34 @@ class DashboardController extends Controller
                 ];
             });
 
+        // If User is not admin, show simpler dashboard or redirect
+        if (auth()->user()->isUser()) {
+            $user = auth()->user();
+            $myActiveLoans = Loan::where('user_id', $user->id)->where('status', 'borrowed')->count();
+            $myReturnedLoans = Loan::where('user_id', $user->id)->where('status', 'returned')->count();
+            
+            $myRecentLoans = Loan::with(['book'])
+                ->where('user_id', $user->id)
+                ->latest()
+                ->limit(5)
+                ->get()
+                ->map(function ($loan) {
+                    return (object) [
+                        'id' => '#'.$loan->id,
+                        'product' => $loan->book->judul,
+                        'status' => $loan->status === 'returned' ? 'Returned' : 'Borrowed',
+                        'total' => $loan->loan_date->format('d/m/Y'),
+                    ];
+                });
+
+            return view('user_dashboard', [
+                'activeLoans' => $myActiveLoans,
+                'returnedLoans' => $myReturnedLoans,
+                'recentOrders' => $myRecentLoans,
+            ]);
+        }
+
+        // Admin Dashboard Data
         return view('dashboard', [
             'totalBooks' => $totalBooks,
             'totalUsers' => $totalUsers,

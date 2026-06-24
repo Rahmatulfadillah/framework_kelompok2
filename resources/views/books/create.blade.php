@@ -17,7 +17,21 @@
         </div>
     </div>
 
-    <form action="{{ route('books.store') }}" method="POST" class="p-6 space-y-6">
+    <!-- External API Search Section -->
+    <div class="p-6 border-b bg-gray-50">
+        <label for="api_search" class="block text-sm font-semibold text-gray-700 mb-2">Cari Data Buku Otomatis (via Google Books)</label>
+        <div class="flex space-x-2">
+            <input type="text" id="api_search" placeholder="Ketik judul buku lalu klik Cari..." 
+                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="button" id="btn_api_search" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                <i class="fas fa-search mr-1"></i> Cari
+            </button>
+        </div>
+        <p id="api_search_status" class="text-xs text-gray-500 mt-2 hidden">Sedang mencari...</p>
+        <div id="api_search_results" class="mt-3 space-y-2"></div>
+    </div>
+
+    <form action="{{ route('books.store') }}" method="POST" class="p-6 space-y-6" id="book_form">
         @csrf
 
         <div class="grid grid-cols-1 gap-6">
@@ -97,3 +111,69 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btnSearch = document.getElementById('btn_api_search');
+        const inputSearch = document.getElementById('api_search');
+        const statusText = document.getElementById('api_search_status');
+        const resultsContainer = document.getElementById('api_search_results');
+
+        btnSearch.addEventListener('click', function() {
+            const query = inputSearch.value.trim();
+            if (query.length < 3) {
+                alert('Masukkan minimal 3 karakter untuk mencari.');
+                return;
+            }
+
+            statusText.classList.remove('hidden');
+            statusText.textContent = 'Sedang mencari data dari Google Books...';
+            resultsContainer.innerHTML = '';
+
+            fetch(`/api/books/search-external?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    statusText.classList.add('hidden');
+                    
+                    if (data.error || !data.length) {
+                        resultsContainer.innerHTML = '<p class="text-sm text-red-500">Buku tidak ditemukan atau terjadi kesalahan.</p>';
+                        return;
+                    }
+
+                    data.forEach((book, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'p-3 border rounded-lg bg-white hover:bg-blue-50 cursor-pointer transition flex flex-col';
+                        div.innerHTML = `
+                            <span class="font-bold text-sm text-gray-800">${book.judul}</span>
+                            <span class="text-xs text-gray-600">${book.pengarang} | ${book.penerbit} | ${book.tahun_terbit || '-'}</span>
+                        `;
+                        div.addEventListener('click', () => fillForm(book));
+                        resultsContainer.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    statusText.classList.add('hidden');
+                    resultsContainer.innerHTML = '<p class="text-sm text-red-500">Terjadi kesalahan koneksi.</p>';
+                });
+        });
+
+        function fillForm(book) {
+            document.getElementById('judul').value = book.judul || '';
+            document.getElementById('pengarang').value = book.pengarang || '';
+            document.getElementById('penerbit').value = book.penerbit || '';
+            document.getElementById('tahun_terbit').value = book.tahun_terbit || '';
+            document.getElementById('kategori').value = book.kategori || '';
+            
+            // Highlight fields slightly to show they were auto-filled
+            ['judul', 'pengarang', 'penerbit', 'tahun_terbit', 'kategori'].forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('bg-blue-50');
+                setTimeout(() => el.classList.remove('bg-blue-50'), 1500);
+            });
+
+            resultsContainer.innerHTML = '<p class="text-sm text-green-600 font-semibold mt-2"><i class="fas fa-check-circle mr-1"></i> Form berhasil diisi otomatis!</p>';
+        }
+    });
+</script>
+@endpush

@@ -35,6 +35,15 @@ class EmailValidationService
             ];
         }
 
+        // 1.5. Google Mail Only Check
+        if (! $this->isGoogleEmail($email)) {
+            return [
+                'valid' => false,
+                'message' => 'Hanya email Google (@gmail.com) yang diperbolehkan',
+                'type' => 'format',
+            ];
+        }
+
         // 2. Check disposable domains
         if ($this->isDisposableEmail($email)) {
             return [
@@ -89,12 +98,25 @@ class EmailValidationService
             return false;
         }
 
-        // No special sequences
-        if (preg_match('/[<>()[\]\\,;:\s@"]/', $email)) {
+        // No special sequences (excluding @ which is required in emails)
+        [$localOnly] = explode('@', $email);
+        if (preg_match('/[<>()[\]\\,;:\s"]/', $localOnly)) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Check if email domain is a valid Google domain
+     */
+    private function isGoogleEmail(string $email): bool
+    {
+        $parts = explode('@', strtolower($email));
+        if (count($parts) !== 2) return false;
+        
+        $domain = $parts[1];
+        return in_array($domain, ['gmail.com', 'googlemail.com']);
     }
 
     /**
@@ -138,7 +160,13 @@ class EmailValidationService
     public function getSuggestion(string $email): ?string
     {
         $commonDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'mail.com'];
+        $validDomains = ['gmail.com', 'googlemail.com'];
         [, $domain] = explode('@', $email);
+
+        // Don't suggest alternatives if domain is already a known valid domain
+        if (in_array(strtolower($domain), $validDomains)) {
+            return null;
+        }
 
         // Check untuk typo umum menggunakan levenshtein distance
         foreach ($commonDomains as $common) {

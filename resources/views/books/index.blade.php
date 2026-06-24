@@ -26,10 +26,12 @@
                 @endif
             </form>
             
+            @if(auth()->user()->isAdmin())
             <!-- Add Button -->
             <a href="{{ route('books.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center justify-center transition shadow-sm">
                 <i class="fas fa-plus mr-2 text-xs"></i> Tambah Buku
             </a>
+            @endif
         </div>
     </div>
 
@@ -78,6 +80,7 @@
                             <a href="{{ route('books.show', $book->id) }}" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="Detail">
                                 <i class="fas fa-eye text-sm"></i>
                             </a>
+                            @if(auth()->user()->isAdmin())
                             <!-- Edit -->
                             <a href="{{ route('books.edit', $book->id) }}" class="text-yellow-500 hover:text-yellow-700 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-lg transition" title="Edit">
                                 <i class="fas fa-edit text-sm"></i>
@@ -90,6 +93,7 @@
                                     <i class="fas fa-trash-alt text-sm"></i>
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

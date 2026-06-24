@@ -49,6 +49,21 @@ class LoanController extends Controller
         }
     }
 
+    public function userBorrow(Request $request, \App\Models\Book $book)
+    {
+        try {
+            $this->loanService->createLoan(
+                auth()->id(),
+                $book->id,
+                now()->format('Y-m-d')
+            );
+
+            return redirect()->route('loans.history')->with('success', 'Berhasil meminjam buku!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal meminjam: '.$e->getMessage());
+        }
+    }
+
     public function show(Loan $loan)
     {
         $loan->load(['user', 'book']);
