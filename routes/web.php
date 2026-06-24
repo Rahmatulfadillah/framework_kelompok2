@@ -10,14 +10,12 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Guest routes (belum login)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
-
 // Email Verification Routes
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
@@ -40,6 +38,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 
 // Auth routes (sudah login)
 Route::middleware(['auth', 'verified'])->group(function () {
+
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Admin Routes

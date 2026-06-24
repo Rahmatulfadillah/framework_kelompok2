@@ -104,13 +104,15 @@
                 </ul>
             </div>
 
+            
+           
+            
             <div class="text-center pt-12 pb-12">
                 <p class="text-gray-600">Sudah punya akun? <a href="{{ route('login') }}" class="underline font-semibold text-blue-600 hover:text-blue-800">Login di sini.</a></p>
             </div>
         </div>
     </div>
 
-    <!-- Image Section -->
     <div class="w-1/2 shadow-2xl">
         <img class="object-cover w-full h-screen hidden md:block"
              src="/login%26register.jpg" alt="Background">

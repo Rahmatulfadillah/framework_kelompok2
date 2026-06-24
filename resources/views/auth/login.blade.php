@@ -53,6 +53,8 @@
                 <p class="text-xs text-gray-500 mt-2 italic">Gunakan kredensial di atas untuk login</p>
             </div>
 
+        
+            
             <div class="text-center pt-12 pb-12">
                 <p class="text-gray-600">Don't have an account? <a href="{{ route('register') }}" class="underline font-semibold text-blue-600 hover:text-blue-800">Register here.</a></p>
             </div>
