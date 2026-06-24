@@ -2,55 +2,100 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Models\Loan;
+use App\Models\User;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $data = [
-            'totalRevenue' => 45231,
-            'totalUsers' => 2847,
-            'activeOrders' => 156,
-            'conversionRate' => 3.24,
-            'recentActivities' => [
-                (object) [
-                    'icon' => 'user-plus',
-                    'color' => 'green',
-                    'title' => 'New user registered',
-                    'description' => 'John Doe created an account',
-                    'time' => '5 min ago'
-                ],
-                (object) [
-                    'icon' => 'shopping-bag',
-                    'color' => 'blue',
-                    'title' => 'New order placed',
-                    'description' => 'Order #12345 - $149.99',
-                    'time' => '15 min ago'
-                ],
-                (object) [
-                    'icon' => 'star',
-                    'color' => 'yellow',
-                    'title' => 'New review submitted',
-                    'description' => '5-star rating for Product X',
-                    'time' => '1 hour ago'
-                ],
-                (object) [
-                    'icon' => 'exclamation-triangle',
-                    'color' => 'red',
-                    'title' => 'System alert',
-                    'description' => 'Server CPU usage at 85%',
-                    'time' => '2 hours ago'
-                ]
-            ],
-            'recentOrders' => [
-                (object) ['id' => '#12345', 'customer' => 'John Smith', 'product' => 'Premium Package', 'status' => 'Completed', 'total' => '$149.99'],
-                (object) ['id' => '#12346', 'customer' => 'Sarah Johnson', 'product' => 'Starter Bundle', 'status' => 'Pending', 'total' => '$79.99'],
-                (object) ['id' => '#12347', 'customer' => 'Mike Wilson', 'product' => 'Pro Subscription', 'status' => 'Processing', 'total' => '$299.99'],
-                (object) ['id' => '#12348', 'customer' => 'Emily Brown', 'product' => 'Basic Plan', 'status' => 'Cancelled', 'total' => '$49.99'],
-            ]
-        ];
+        // 1. Gather stats
+        $totalBooks = Book::count();
+        $totalUsers = User::count();
+        $activeLoans = Loan::where('status', 'borrowed')->count();
+        $returnedLoans = Loan::where('status', 'returned')->count();
 
-        return view('dashboard', $data);
+        // 2. Fetch recent activities (mapped from recent loans)
+        $recentLoans = Loan::with(['user', 'book'])
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        $recentActivities = $recentLoans->map(function ($loan) {
+            $isReturned = $loan->status === 'returned';
+
+            return (object) [
+                'icon' => $isReturned ? 'check-circle' : 'exchange-alt',
+                'color' => $isReturned ? 'green' : 'blue',
+                'title' => $isReturned ? 'Buku Dikembalikan' : 'Buku Dipinjam',
+                'description' => $loan->user->name.($isReturned ? ' mengembalikan ' : ' meminjam ').'"'.$loan->book->judul.'"',
+                'time' => $loan->created_at ? $loan->created_at->diffForHumans() : $loan->loan_date->diffForHumans(),
+            ];
+        });
+
+        // 3. Gather Chart.js data (loan counts for the past 7 days)
+        $chartLabels = [];
+        $chartValues = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $chartLabels[] = $date->format('d M');
+            $chartValues[] = Loan::whereDate('loan_date', $date)->count();
+        }
+
+        // 4. Gather recent loans list (table view)
+        $recentOrders = Loan::with(['user', 'book'])
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(function ($loan) {
+                return (object) [
+                    'id' => '#'.$loan->id,
+                    'customer' => $loan->user->name,
+                    'product' => $loan->book->judul,
+                    'status' => $loan->status === 'returned' ? 'Returned' : 'Borrowed',
+                    'total' => $loan->loan_date->format('d/m/Y'),
+                ];
+            });
+
+        // If User is not admin, show simpler dashboard or redirect
+        if (auth()->user()->isUser()) {
+            $user = auth()->user();
+            $myActiveLoans = Loan::where('user_id', $user->id)->where('status', 'borrowed')->count();
+            $myReturnedLoans = Loan::where('user_id', $user->id)->where('status', 'returned')->count();
+            
+            $myRecentLoans = Loan::with(['book'])
+                ->where('user_id', $user->id)
+                ->latest()
+                ->limit(5)
+                ->get()
+                ->map(function ($loan) {
+                    return (object) [
+                        'id' => '#'.$loan->id,
+                        'product' => $loan->book->judul,
+                        'status' => $loan->status === 'returned' ? 'Returned' : 'Borrowed',
+                        'total' => $loan->loan_date->format('d/m/Y'),
+                    ];
+                });
+
+            return view('user_dashboard', [
+                'activeLoans' => $myActiveLoans,
+                'returnedLoans' => $myReturnedLoans,
+                'recentOrders' => $myRecentLoans,
+            ]);
+        }
+
+        // Admin Dashboard Data
+        return view('dashboard', [
+            'totalBooks' => $totalBooks,
+            'totalUsers' => $totalUsers,
+            'activeLoans' => $activeLoans,
+            'returnedLoans' => $returnedLoans,
+            'recentActivities' => $recentActivities,
+            'recentOrders' => $recentOrders,
+            'chartLabels' => $chartLabels,
+            'chartValues' => $chartValues,
+        ]);
     }
 }
